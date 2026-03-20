@@ -1,5 +1,5 @@
 # 💈 Sistema de Agendamento para Barbearia
-# 💈 Sistema de Agendamento para Barbearia
+
 
 Desenvolvi um sistema de agendamento para barbearia utilizando Python, com foco na automação do processo de marcação de horários.
 
