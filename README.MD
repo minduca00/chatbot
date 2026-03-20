@@ -21,9 +21,9 @@ Futuramente, o sistema poderá ser integrado com WhatsApp e Google Agenda para a
 - Python
 - SQLite
 - Flask
-- Twilio API
 
-## 📲 Em desenvolvimento
+
+## 📲 Em desenvolvimento futuro
 
 - Integração com WhatsApp
 - Integração com Google Agenda
