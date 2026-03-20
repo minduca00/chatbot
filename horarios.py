@@ -1,7 +1,11 @@
 from datetime import datetime
-from dados import cursor, conexao
+from dados import horarios_ocupados
+import sqlite3
 
-def horarios_disponiveis(data):
+conexao = sqlite3.connect('agendamentos.db')
+cursor = conexao.cursor()
+
+def tipo_dia(data):
     data_obj= datetime.strptime(data, '%Y-%m-%d')
     dia_semana = data_obj.weekday()  # 0: Segunda, 1: Terça, ..., 6: Domingo
 
@@ -13,7 +17,7 @@ def horarios_disponiveis(data):
         return"normal" #terça a sábado
     
 def gerar_horarios_por_dia(data):
-    tipo = horarios_disponiveis(data)
+    tipo = tipo_dia(data)
     horarios = []
 
     if tipo == "fechado":
@@ -30,4 +34,31 @@ def gerar_horarios_por_dia(data):
             horarios.append(f"{hora:02d}:30")
     return horarios
 
-#
+#horarios de almoço
+
+def remover_horarios_almoco(horarios, data):
+    if horarios_disponiveis(data) == "normal":
+        bloqueados = ["12:00", "12:30", "13:00", "13:30"]
+        return [h for h in horarios if h not in bloqueados]
+    return horarios
+
+#horarios disoniveis para um dia
+
+def horarios_ocupados(data):
+    cursor.execute("SELECT horario FROM agendamentos WHERE data = ?", (data,))
+    resultado = cursor.fetchall()
+    return [row[0] for row in resultado]
+
+def horarios_disponiveis(data):
+    tipo = tipo_dia(data)
+    if tipo == "fechado":
+        return "não funcionamos na segunda-feira " 
+    
+    horarios = gerar_horarios_por_dia(data)
+    horarios = remover_horarios_almoco(horarios, data)
+
+    ocupados = horarios_ocupados(data)
+
+    livres = [h for h in horarios if h not in ocupados]
+    return livres
+        
